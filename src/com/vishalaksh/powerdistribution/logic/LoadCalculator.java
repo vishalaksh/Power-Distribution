@@ -22,20 +22,37 @@ public class LoadCalculator implements Constants {
 		int loadTimeArr[][] = new int[phase][time_total];
 
 		if (phaseLoad == 1) {
+
+			// for each load window
 			for (int i = 0; i < windows; i++) {
 				LoadWindows lw = al.get(i);
-				// if phase is -1 then auto else manual
-				int currPhase = lw.phase_int;
-				if (currPhase < 0) {
-					// get the array with lowest peak element
-					currPhase = getAutoPhase(loadTimeArr);
+
+				// decide/get the phase in which load is to be added
+				int currPhase = getCurrPhase(lw.phase_int, loadTimeArr);
+
+				//assign a new phase if overloading is there
+				while (isOverLoading(
+						loadTimeArr[currPhase][lw.time_start_mins], lw.rating)) {
+					// change phase
+					// auto: try next phase
+					currPhase = (currPhase + 1) % phase;
+
+					// update phase
+					lw.phase_int = currPhase;
+
 				}
-				// end time is excluded
+
+				// for the time span, add the load
 				for (int j = lw.time_start_mins; j < lw.time_end_mins; j++) {
+
 					loadTimeArr[currPhase][j] += lw.rating;
+
 				}
+
 			}
 		} else if (phaseLoad == 3) {
+			//TODO check for overloading in 3 phase load
+			
 			// for 3 phase load, add equally in all 3 phases
 			for (int i = 0; i < windows; i++) {
 				LoadWindows lw = al.get(i);
@@ -50,6 +67,25 @@ public class LoadCalculator implements Constants {
 
 		}
 
+	}
+
+	private int getCurrPhase(int phase_int, int[][] loadTimeArr) {
+		// if phase is -1 then auto
+		int currPhase = phase_int;
+		if (currPhase < 0) {
+			// get the array with lowest peak element
+			currPhase = getAutoPhase(loadTimeArr);
+		}
+		return currPhase;
+	}
+
+	private boolean isOverLoading(int currentLoad, int additionalLoad) {
+		int finalLoad = currentLoad + additionalLoad;
+
+		if (finalLoad > rating_trans_per_phase) {
+			return true;
+		}
+		return false;
 	}
 
 	private int getAutoPhase(int[][] loadTimeArr) {
