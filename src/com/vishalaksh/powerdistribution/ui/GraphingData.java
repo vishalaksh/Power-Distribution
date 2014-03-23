@@ -8,7 +8,8 @@ import javax.swing.*;
 import com.vishalaksh.powerdistribution.logic.Constants;
 
 public class GraphingData extends JPanel implements Constants {
-
+	// thanks to
+	// http://www.java-forums.org/new-java/7995-how-plot-graph-java-given-samples.html
 	// TODO fetch data from loadcalculator
 	int data[][] = new int[3][time_total];
 	int phases = 3;

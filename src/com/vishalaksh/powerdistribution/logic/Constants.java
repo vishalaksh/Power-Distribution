@@ -8,4 +8,8 @@ public interface Constants {
 	String phase_A="A";
 	String phase_B="B";
 	String phase_C="C";
+	
+	String keyPanelOne="panelOne";
+	String keyPanelTwo="panelTwo";
+	String keyPanelThree="panelThree";
 }

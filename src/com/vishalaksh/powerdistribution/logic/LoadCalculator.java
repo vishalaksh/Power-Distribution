@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class LoadCalculator implements Constants {
 
+	// get load phase
+	public int phaseLoad = 3;
+
+	// get phase number
+	public	int phase = 3;
+
+	// get number of windows
+	public	int windows = 4;
+
 	void function() {
-
-		// get load phase
-		int phaseLoad = 3;
-
-		// get phase number
-		int phase = 3;
-
-		// get number of windows
-		int windows = 4;
 
 		// get va rating and corresponding time window
 		ArrayList<LoadWindows> al = getwindows(windows);
@@ -30,7 +30,7 @@ public class LoadCalculator implements Constants {
 				// decide/get the phase in which load is to be added
 				int currPhase = getCurrPhase(lw.phase_int, loadTimeArr);
 
-				//assign a new phase if overloading is there
+				// assign a new phase if overloading is there
 				while (isOverLoading(
 						loadTimeArr[currPhase][lw.time_start_mins], lw.rating)) {
 					// change phase
@@ -51,8 +51,8 @@ public class LoadCalculator implements Constants {
 
 			}
 		} else if (phaseLoad == 3) {
-			//TODO check for overloading in 3 phase load
-			
+			// TODO check for overloading in 3 phase load
+
 			// for 3 phase load, add equally in all 3 phases
 			for (int i = 0; i < windows; i++) {
 				LoadWindows lw = al.get(i);
