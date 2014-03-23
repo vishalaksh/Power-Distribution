@@ -8,11 +8,13 @@ import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
@@ -83,21 +85,32 @@ public class GraphingData extends JPanel implements Constants {
 		// set uniform scale for all the phases
 		double xInc = (double) (w - 2 * PAD) / (time_total);
 		double scale = (double) (h - 2 * PAD) / getMax(data);
+		
+		//System.out.println("getMax(data):"+getMax(data));
 
 		// Draw lines.
 		for (int currPhase = 0; currPhase < lc.phaseSupply; currPhase++) {
 
 			// set line color acc. to the phase
 			g2.setPaint(getPaint(currPhase));
-			
-			for (int i = 0; i < data[currPhase].length - 1; i++) {
+			System.out.println(Arrays.toString(data[currPhase]));
+			for (int i = 0; i < (data[currPhase].length - 1); i++) {
 				
 				double x1 = PAD + i * xInc;
 				double y1 = h - PAD - scale * data[currPhase][i];
 				double x2 = PAD + (i + 1) * xInc;
 				double y2 = h - PAD - scale * data[currPhase][i + 1];
+			//	System.out.println(String.format("i=%d from(%.2f,%.2f) to(%.2f,%.2f)",i,x1,y1,x2,y2));
 				g2.draw(new Line2D.Double(x1, y1, x2, y2));
 			}
+			
+			 // Mark data points.
+	        g2.setPaint(Color.red);
+	        for(int i = 0; i < (data[currPhase].length - 1); i++) {
+	            double x = PAD + i*xInc;
+	            double y = h - PAD - scale * data[currPhase][i];
+	            g2.fill(new Ellipse2D.Double(x-2, y-2, 4, 4));
+	        }
 		}
 
 	}
