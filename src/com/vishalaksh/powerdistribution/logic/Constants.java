@@ -12,4 +12,11 @@ public interface Constants {
 	String keyPanelOne="panelOne";
 	String keyPanelTwo="panelTwo";
 	String keyPanelThree="panelThree";
+	
+	String fileInput="Input_Data.txt";
+	
+	int LineNumberphaseLoad=1;
+	int LineNumberphaseSupply=2;
+	int LineNumberwindowsNumber=3;
+	int LineNumberWindows=4;
 }

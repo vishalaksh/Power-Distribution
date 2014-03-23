@@ -8,23 +8,27 @@ public class LoadCalculator implements Constants {
 	public int phaseLoad = 3;
 
 	// get phase number
-	public	int phase = 3;
+	public int phaseSupply = 3;
 
 	// get number of windows
-	public	int windows = 4;
+	public int windowsNumber = 4;
 
-	void function() {
+	ArrayList<LoadWindows> al;
+
+	int loadTimeArr[][];
+
+	public void function() {
 
 		// get va rating and corresponding time window
-		ArrayList<LoadWindows> al = getwindows(windows);
+		// al = getwindows(windows);
 
 		// fill time array
-		int loadTimeArr[][] = new int[phase][time_total];
+		loadTimeArr = new int[phaseSupply][time_total];
 
 		if (phaseLoad == 1) {
 
 			// for each load window
-			for (int i = 0; i < windows; i++) {
+			for (int i = 0; i < windowsNumber; i++) {
 				LoadWindows lw = al.get(i);
 
 				// decide/get the phase in which load is to be added
@@ -35,7 +39,7 @@ public class LoadCalculator implements Constants {
 						loadTimeArr[currPhase][lw.time_start_mins], lw.rating)) {
 					// change phase
 					// auto: try next phase
-					currPhase = (currPhase + 1) % phase;
+					currPhase = (currPhase + 1) % phaseSupply;
 
 					// update phase
 					lw.phase_int = currPhase;
@@ -54,7 +58,7 @@ public class LoadCalculator implements Constants {
 			// TODO check for overloading in 3 phase load
 
 			// for 3 phase load, add equally in all 3 phases
-			for (int i = 0; i < windows; i++) {
+			for (int i = 0; i < windowsNumber; i++) {
 				LoadWindows lw = al.get(i);
 
 				for (int currPhase = 0; currPhase < loadTimeArr.length; currPhase++) {
@@ -67,6 +71,27 @@ public class LoadCalculator implements Constants {
 
 		}
 
+	}
+
+	public int[][] getLoadTimeArr() {
+		return loadTimeArr;
+	}
+
+	public LoadCalculator(int phaseLoad, int phase, int windows,
+			ArrayList<LoadWindows> al) {
+		super();
+		this.phaseLoad = phaseLoad;
+		this.phaseSupply = phase;
+		this.windowsNumber = windows;
+		this.al = al;
+	}
+
+	public LoadCalculator(InputData data) {
+		super();
+		this.phaseLoad = data.phaseLoad;
+		this.phaseSupply = data.phaseSupply;
+		this.windowsNumber = data.windowsNumber;
+		this.al = data.alWindows;
 	}
 
 	private int getCurrPhase(int phase_int, int[][] loadTimeArr) {

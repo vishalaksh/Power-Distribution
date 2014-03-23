@@ -67,7 +67,7 @@ public class WindowMain implements Constants {
 	 */
 	private void initialize() {
 		
-		 mLoadCalculator=new LoadCalculator();
+	//	 mLoadCalculator=new LoadCalculator();
 		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
@@ -110,11 +110,11 @@ public class WindowMain implements Constants {
 		btn1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				
-				mLoadCalculator.phase=Integer.parseInt(txtPhase.getText());
+				mLoadCalculator.phaseSupply=Integer.parseInt(txtPhase.getText());
 				mLoadCalculator.phaseLoad=Integer.parseInt(txtLoadPhase.getText());
-				mLoadCalculator.windows=Integer.parseInt(txtNoOfWindows.getText());
+				mLoadCalculator.windowsNumber=Integer.parseInt(txtNoOfWindows.getText());
 
-				for(int i=0; i<mLoadCalculator.windows; i++){
+				for(int i=0; i<mLoadCalculator.windowsNumber; i++){
 					
 				}
 				
