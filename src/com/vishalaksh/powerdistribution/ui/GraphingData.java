@@ -93,7 +93,8 @@ public class GraphingData extends JPanel implements Constants {
 
 			// set line color acc. to the phase
 			g2.setPaint(getPaint(currPhase));
-			System.out.println(Arrays.toString(data[currPhase]));
+		
+		//	System.out.println(currPhase+":"+Arrays.toString(data[currPhase]));
 			for (int i = 0; i < (data[currPhase].length - 1); i++) {
 				
 				double x1 = PAD + i * xInc;
@@ -104,13 +105,6 @@ public class GraphingData extends JPanel implements Constants {
 				g2.draw(new Line2D.Double(x1, y1, x2, y2));
 			}
 			
-			 // Mark data points.
-	        g2.setPaint(Color.red);
-	        for(int i = 0; i < (data[currPhase].length - 1); i++) {
-	            double x = PAD + i*xInc;
-	            double y = h - PAD - scale * data[currPhase][i];
-	            g2.fill(new Ellipse2D.Double(x-2, y-2, 4, 4));
-	        }
 		}
 
 	}

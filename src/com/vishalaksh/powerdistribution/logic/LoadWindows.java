@@ -28,16 +28,18 @@ public class LoadWindows implements Constants {
 		this.phase_string = phase_String;
 
 		this.time_start_mins = Integer.parseInt(time_start_string.substring(0,
-				2))
+				2))*60
 				+ Integer.parseInt(time_start_string.substring(
 						time_start_string.length() - 2,
 						time_start_string.length()));
 
-		this.time_end_mins = Integer.parseInt(time_end_string.substring(0, 2))
+		this.time_end_mins = Integer.parseInt(time_end_string.substring(0, 2))*60
 				+ Integer
 						.parseInt(time_end_string.substring(
 								time_end_string.length() - 2,
 								time_end_string.length()));
+		
+		
 
 		if (this.phase_string != null) {
 			if (this.phase_string.equalsIgnoreCase(phase_A)) {
@@ -52,5 +54,7 @@ public class LoadWindows implements Constants {
 		} else {
 			phase_int = -1;
 		}
+		
+	
 	}
 }

@@ -48,7 +48,7 @@ public class LoadCalculator implements Constants {
 
 				// for the time span, add the load
 				for (int j = lw.time_start_mins; j < lw.time_end_mins; j++) {
-
+					//System.out.println(String.format("adding %d to phase:%d at %d", lw.rating,currPhase,j));
 					loadTimeArr[currPhase][j] += lw.rating;
 
 				}
@@ -92,6 +92,7 @@ public class LoadCalculator implements Constants {
 		this.phaseSupply = data.phaseSupply;
 		this.windowsNumber = data.windowsNumber;
 		this.al = data.alWindows;
+		
 	}
 
 	private int getCurrPhase(int phase_int, int[][] loadTimeArr) {
