@@ -1,6 +1,21 @@
+NOTE:
+1. PLEASE DONT MODIFY THE FILE EXCEPT THE INPUT DATA
+2. 3 PHASES ARE NAMED AS 'A', 'B' AND 'C'
+3. TIME FORMAT IS hh:mm:
+4. IT IS NOT NECESSARY TO SPECIFY THE CONNECTED PHASE OF LOAD
+5. LOAD DETAILS ARE SEPERATED BY SPACES
+6. PER PHASE RATING OF TRANSFORMER IS SET AS 500
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+Enter the number of phases of load:
 1
+Enter the number of phases of supply:
 3
-3
+Enter the details of load in following format:
+Load start_time end_time connected_phase
 100 10:00 16:00 A
 200 12:00 18:00 B
 300 13:00 18:00 C
+100 13:00 18:00 C
+200 08:00 12:00 A

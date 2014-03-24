@@ -12,6 +12,7 @@ import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -56,7 +57,8 @@ public class GraphingData extends JPanel implements Constants {
 		// Draw abcissa.
 		g2.draw(new Line2D.Double(PAD, h - PAD, w - PAD, h - PAD));
 
-		int maxY=getMax(data);
+		/*int maxY=getMax(data);*/
+		int maxY=rating_trans_per_phase;
 		// set uniform scale for all the phases
 		double xInc = (double) (w - 2 * PAD) / (time_total);
 		double scale = (double) (h - 2 * PAD) /maxY ;
@@ -163,21 +165,7 @@ public class GraphingData extends JPanel implements Constants {
 		return max;
 	}
 
-	private int getMaxI(int[][] data) {
-		int max = -Integer.MAX_VALUE;
-		int maxI = 0;
-		for (int i = 0; i < data.length; i++) {
 
-			for (int j = 0; j < data[i].length; j++) {
-
-				if (data[i][j] > max) {
-					max = data[i][j];
-					maxI = i;
-				}
-			}
-		}
-		return maxI;
-	}
 
 	public static void main(String[] args) throws FileNotFoundException {
 
@@ -199,6 +187,10 @@ public class GraphingData extends JPanel implements Constants {
 
 		if (!file.exists()) {
 			file.createNewFile();
+			PrintWriter out = new PrintWriter(file);
+			out.println(defaultText);
+			out.close();
+			
 		}
 		ArrayList<LoadWindows> arrlist = new ArrayList<>();
 
@@ -209,15 +201,18 @@ public class GraphingData extends JPanel implements Constants {
 				LineNumberphaseLoad);
 		String phaseSupplyString = MyFileReader.readLineFromFile(file,
 				LineNumberphaseSupply);
-		String windowsNumberString = MyFileReader.readLineFromFile(file,
+	/*	String windowsNumberString = MyFileReader.readLineFromFile(file,
 				LineNumberwindowsNumber);
-
+*/
 		Scanner scn = MyFileReader.getScannerAtLine(new Scanner(file),
 				LineNumberWindows);
 
-		int windowsNumberInt = Integer.parseInt(windowsNumberString);
-		for (int i = 0; i < windowsNumberInt; i++) {
-			String s = scn.nextLine();
+		//int windowsNumberInt = Integer.parseInt(windowsNumberString);
+		String s;
+		int windowsNumberInt=0;
+		while(scn.hasNextLine()&&(s = scn.nextLine())!=null&&!s.trim().isEmpty()) {
+			
+			windowsNumberInt++;
 			Scanner scn1 = new Scanner(s);
 
 			String rating = scn1.next();
