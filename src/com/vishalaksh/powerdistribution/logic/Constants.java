@@ -19,4 +19,9 @@ public interface Constants {
 	int LineNumberphaseSupply=2;
 	int LineNumberwindowsNumber=3;
 	int LineNumberWindows=4;
+	
+	int xSpacingConst=2;
+	
+	float ordinateIncScale=100.0f;
+	float abcissaIncScale=80.0f;
 }

@@ -8,13 +8,11 @@ import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
@@ -34,7 +32,7 @@ public class GraphingData extends JPanel implements Constants {
 	int phasesLoad;
 
 	LoadCalculator lc;
-	final int PAD = 20;
+	final int PAD = 30;
 
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -58,6 +56,11 @@ public class GraphingData extends JPanel implements Constants {
 		// Draw abcissa.
 		g2.draw(new Line2D.Double(PAD, h - PAD, w - PAD, h - PAD));
 
+		int maxY=getMax(data);
+		// set uniform scale for all the phases
+		double xInc = (double) (w - 2 * PAD) / (time_total);
+		double scale = (double) (h - 2 * PAD) /maxY ;
+
 		// Draw labels.
 		Font font = g2.getFont();
 		FontRenderContext frc = g2.getFontRenderContext();
@@ -66,45 +69,62 @@ public class GraphingData extends JPanel implements Constants {
 
 		// Ordinate label.
 		String s = "data";
-		float sy = PAD + ((h - 2 * PAD) - s.length() * sh) / 2 + lm.getAscent();
-		for (int i = 0; i < s.length(); i++) {
-			String letter = String.valueOf(s.charAt(i));
-			float sw = (float) font.getStringBounds(letter, frc).getWidth();
-			float sx = (PAD - sw) / 2;
-			g2.drawString(letter, sx, sy);
-			sy += sh;
+
+		// Space between axis and label.
+		final int SPAD = 2;
+		
+
+		float sy;
+	
+		for (int i = 0; i < maxY; ) {
+			String s2 = String.valueOf(i);
+			float sw = (float)font.getStringBounds(s2, frc).getWidth();
+			int sx = (int) (PAD - sw - SPAD);
+		
+			int sy1 = (int) (h - PAD - scale*i + lm.getAscent()/2);
+			g.drawString(s2, sx, sy1);
+			
+			
+			
+			int increment=(int)(Math.round( maxY / ordinateIncScale) * 10);
+			
+			i+=increment;
+		
 		}
+		
 
 		// Abcissa label.
-		s = "x axis";
-		sy = h - PAD + (PAD - sh) / 2 + lm.getAscent();
-		float sw = (float) font.getStringBounds(s, frc).getWidth();
-		float sx = (w - sw) / 2;
-		g2.drawString(s, sx, sy);
+	
+		for (int i = 0; i < time_total; ) {
 
-		// set uniform scale for all the phases
-		double xInc = (double) (w - 2 * PAD) / (time_total);
-		double scale = (double) (h - 2 * PAD) / getMax(data);
-		
-		//System.out.println("getMax(data):"+getMax(data));
+			String s1 = String.valueOf(getTimeString(i));
+			float x = (float) (PAD + i*xInc) ;
+			sy = h - PAD + (PAD - sh) / 2 + lm.getAscent();
+			g2.drawString(s1, x, sy);
+			int increment=(int)(Math.round( time_total / abcissaIncScale) * 10);
+			System.out.println("i:"+i);
+			System.out.println("s2:"+increment);
+			
+			i+=increment;
+		}
 
 		// Draw lines.
 		for (int currPhase = 0; currPhase < lc.phaseSupply; currPhase++) {
 
 			// set line color acc. to the phase
 			g2.setPaint(getPaint(currPhase));
-		
-		//	System.out.println(currPhase+":"+Arrays.toString(data[currPhase]));
+
+			// System.out.println(currPhase+":"+Arrays.toString(data[currPhase]));
 			for (int i = 0; i < (data[currPhase].length - 1); i++) {
-				
+
 				double x1 = PAD + i * xInc;
 				double y1 = h - PAD - scale * data[currPhase][i];
 				double x2 = PAD + (i + 1) * xInc;
 				double y2 = h - PAD - scale * data[currPhase][i + 1];
-			//	System.out.println(String.format("i=%d from(%.2f,%.2f) to(%.2f,%.2f)",i,x1,y1,x2,y2));
+				// System.out.println(String.format("i=%d from(%.2f,%.2f) to(%.2f,%.2f)",i,x1,y1,x2,y2));
 				g2.draw(new Line2D.Double(x1, y1, x2, y2));
 			}
-			
+
 		}
 
 	}
@@ -132,7 +152,7 @@ public class GraphingData extends JPanel implements Constants {
 		int max = -Integer.MAX_VALUE;
 
 		for (int i = 0; i < data.length; i++) {
-			
+
 			for (int j = 0; j < data[i].length; j++) {
 
 				if (data[i][j] > max) {
@@ -141,6 +161,22 @@ public class GraphingData extends JPanel implements Constants {
 			}
 		}
 		return max;
+	}
+
+	private int getMaxI(int[][] data) {
+		int max = -Integer.MAX_VALUE;
+		int maxI = 0;
+		for (int i = 0; i < data.length; i++) {
+
+			for (int j = 0; j < data[i].length; j++) {
+
+				if (data[i][j] > max) {
+					max = data[i][j];
+					maxI = i;
+				}
+			}
+		}
+		return maxI;
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
@@ -201,5 +237,10 @@ public class GraphingData extends JPanel implements Constants {
 		return new InputData(Integer.parseInt(phaseLoadString),
 				Integer.parseInt(phaseSupplyString), windowsNumberInt, arrlist);
 
+	}
+
+	static String getTimeString(int min) {
+		//return (String.valueOf(min / 60) + ":" + String.valueOf(min % 60));
+		return (String.format("%02d",(min / 60)) + ":" + String.format("%02d",(min % 60)));
 	}
 }
